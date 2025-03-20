@@ -8,7 +8,8 @@ app.use(express.json());
 dotenv.config();
 app.use(
   cors({
-    origin: ["https://allmytab.com", "http:localhost:5173"],
+    // origin: ["https://allmytab.com", "http:localhost:5173"],
+    origin: ["*"],
     methods: ["GET", "POST"],
     credentials: true,
   })
