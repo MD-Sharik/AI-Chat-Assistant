@@ -11,10 +11,13 @@ app.use(cors("https://allmytab.com"));
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-8b" });
 
+app.get("/", (req, res) => {
+  res.send("Hello World");
+});
+
 app.post("/chat", async (req, res) => {
   const { message } = req.body;
-  const prompt = `The following is a conversation between a user and an AI assistant.
-    The assistant is helpful and friendly. this is the Message Respond to it:-
+  const prompt = `I am Grobo, a personal AI assistant for Allmytab.com users. I'm here to help you in a friendly and helpful way. Please don't refer to me as Gemini or any other AI - I'm Grobo! Here is my response to your message:
     ${message}
     `;
   try {
@@ -32,7 +35,7 @@ app.post("/chat", async (req, res) => {
         .json({ error: "Unexpected response format", data: result });
     }
 
-    console.log("Response generated successfully");
+    // console.log("Response generated successfully");
   } catch (error) {
     console.error("Error generating response:", error);
     res.status(500).send("Error processing request.");
