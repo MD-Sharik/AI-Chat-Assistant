@@ -6,7 +6,13 @@ import cors from "cors";
 const app = express();
 app.use(express.json());
 dotenv.config();
-app.use(cors("https://allmytab.com"));
+app.use(
+  cors({
+    origin: ["https://allmytab.com", "http:localhost:5173"],
+    methods: ["GET", "POST"],
+    credentials: true,
+  })
+);
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-8b" });
