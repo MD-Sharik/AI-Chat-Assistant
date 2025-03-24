@@ -8,7 +8,7 @@ app.use(express.json());
 dotenv.config();
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 15 minutes
-  limit: 5,
+  limit: 20,
 });
 
 app.use(limiter);
