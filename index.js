@@ -58,18 +58,24 @@ app.post("/image", async (req, res) => {
   const model = genAI.getGenerativeModel({
     model: "gemini-2.0-flash-exp-image-generation",
     generationConfig: {
-      responseModalities: ["Image"],
+      responseModalities: ["Text", "Image"],
     },
   });
 
   try {
     const response = await model.generateContent(message);
-    const part = response.response.candidates[0].content.parts[0];
-    if (part && part.inlineData) {
-      const imageData = part.inlineData.data;
-      // send file directly without storing
-      res.json({ image: `data:image/png;base64,${imageData}` });
+    let responseData = {};
+
+    for (const part of response.response.candidates[0].content.parts) {
+      if (part.text) {
+        responseData.text = part.text;
+      } else if (part.inlineData) {
+        const imageData = part.inlineData.data; // Base64-encoded image
+        responseData.image = `data:image/png;base64,${imageData}`;
+      }
     }
+
+    res.json(responseData); // Send image as Base64
   } catch (error) {
     console.error("Error generating content:", error);
     res.status(500).json({ error: "Failed to generate content" });
